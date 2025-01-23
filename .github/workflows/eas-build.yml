@@ -1,4 +1,4 @@
-name: EAS Build
+name: Android APK Build
 
 on:
   push:
@@ -32,7 +32,5 @@ jobs:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
         run: echo "Authenticated with Expo"
 
-      - name: Run EAS Build
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform ios --non-interactive
+      - name: Build APK
+        run: eas build --platform android --profile production --non-interactive

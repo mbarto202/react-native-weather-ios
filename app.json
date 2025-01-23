@@ -16,8 +16,13 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.mbarto.reactnativeweatherios"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "android": {
+      "package": "com.yourcompany.reactnativeweather",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
     },
     "extra": {
       "eas": {
