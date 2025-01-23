@@ -30,7 +30,7 @@ jobs:
       - name: Authenticate with Expo
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: echo "Expo authentication successful"
+        run: printenv | grep EXPO_TOKEN
 
       - name: Run EAS Build
         run: eas build --platform all
