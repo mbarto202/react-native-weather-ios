@@ -9,7 +9,7 @@ export default function App() {
     </View>
   );
 }
-//trying to get actions working!
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
