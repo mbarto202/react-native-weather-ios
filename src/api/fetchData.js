@@ -1,6 +1,6 @@
-export async function fetchWeatherData(lat, lon) {
+export async function fetchWeatherData(city) {
   const apiKey = "0b119156d44fd4ae748de6662549bb18";
-  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`;
 
   try {
     const response = await fetch(url);
@@ -9,15 +9,12 @@ export async function fetchWeatherData(lat, lon) {
     }
     const data = await response.json();
 
-    // Convert temperatures to Celsius
-    const kelvinToCelsius = (temp) => (temp - 273.15).toFixed(1);
-
     return {
       location: data.name || "Unknown location",
-      country: data.sys.country,
-      temperature: kelvinToCelsius(data.main.temp),
-      feelsLike: kelvinToCelsius(data.main.feels_like),
-      weather: data.weather[0].description,
+      country: data.sys.country || "Unknown country",
+      temperature: data.main.temp.toFixed(1),
+      feelsLike: data.main.feels_like.toFixed(1),
+      weather: data.weather[0]?.description || "No description available",
       windSpeed: data.wind.speed,
       windDirection: data.wind.deg,
       humidity: data.main.humidity,

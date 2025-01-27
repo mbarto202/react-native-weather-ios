@@ -5,14 +5,29 @@ import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const [weather, setWeather] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    async function getWeather() {
-      const data = await fetchWeatherData(39.6293, 75.6583); // Coordinates for Kashgar
-      setWeather(data);
-    }
+    const getWeather = async () => {
+      try {
+        const data = await fetchWeatherData("Bear");
+        setWeather(data);
+      } catch (error) {
+        setErrorMessage("Failed to fetch weather data.");
+      }
+    };
+
     getWeather();
   }, []);
+
+  if (errorMessage) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.error}>{errorMessage}</Text>
+        <StatusBar style="auto" />
+      </View>
+    );
+  }
 
   if (!weather) {
     return (
@@ -25,30 +40,12 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Weather App</Text>
-      <Text>
-        <Text style={styles.label}>Location:</Text> {weather.location},{" "}
-        {weather.country}
+      <Text style={styles.title}>My Location</Text>
+      <Text style={styles.city}>
+        {weather.location}, {weather.country}
       </Text>
-      <Text>
-        <Text style={styles.label}>Temperature:</Text> {weather.temperature}°C
-      </Text>
-      <Text>
-        <Text style={styles.label}>Feels Like:</Text> {weather.feelsLike}°C
-      </Text>
-      <Text>
-        <Text style={styles.label}>Weather:</Text> {weather.weather}
-      </Text>
-      <Text>
-        <Text style={styles.label}>Wind Speed:</Text> {weather.windSpeed} m/s
-      </Text>
-      <Text>
-        <Text style={styles.label}>Wind Direction:</Text>{" "}
-        {weather.windDirection}°
-      </Text>
-      <Text>
-        <Text style={styles.label}>Humidity:</Text> {weather.humidity}%
-      </Text>
+      <Text style={styles.temperature}>{weather.temperature}°</Text>
+      <Text style={styles.condition}>{weather.weather}</Text>
       <StatusBar style="auto" />
     </View>
   );
@@ -57,17 +54,31 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#000f2f",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 28,
+    color: "white",
   },
-  label: {
-    fontWeight: "bold",
+  city: {
+    fontSize: 24,
+    color: "white",
+    marginVertical: 8,
+  },
+  temperature: {
+    fontSize: 64,
+    color: "white",
+    marginVertical: 16,
+  },
+  condition: {
+    fontSize: 24,
+    color: "white",
+  },
+  error: {
+    fontSize: 18,
+    color: "red",
   },
 });
