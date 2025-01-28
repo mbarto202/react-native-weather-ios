@@ -46,6 +46,10 @@ export default function App() {
       </Text>
       <Text style={styles.temperature}>{weather.temperature}°</Text>
       <Text style={styles.condition}>{weather.weather}</Text>
+      <View style={styles.tempRange}>
+        <Text style={styles.minMax}>H:{weather.maxTemperature}°</Text>
+        <Text style={styles.minMax}>L:{weather.minTemperature}°</Text>
+      </View>
       <StatusBar style="auto" />
     </View>
   );
@@ -72,6 +76,16 @@ const styles = StyleSheet.create({
     fontSize: 64,
     color: "white",
     marginVertical: 16,
+  },
+  tempRange: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "30%",
+    marginBottom: 16,
+  },
+  minMax: {
+    color: "#fff",
+    fontWeight: "600",
   },
   condition: {
     fontSize: 24,

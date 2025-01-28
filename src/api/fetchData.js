@@ -12,8 +12,10 @@ export async function fetchWeatherData(city) {
     return {
       location: data.name || "Unknown location",
       country: data.sys.country || "Unknown country",
-      temperature: data.main.temp.toFixed(1),
-      feelsLike: data.main.feels_like.toFixed(1),
+      temperature: Math.round(data.main.temp),
+      minTemperature: Math.round(data.main.temp_min),
+      maxTemperature: Math.round(data.main.temp_max),
+      feelsLike: Math.round(data.main.feels_like),
       weather: data.weather[0]?.description || "No description available",
       windSpeed: data.wind.speed,
       windDirection: data.wind.deg,
