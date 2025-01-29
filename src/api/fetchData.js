@@ -26,3 +26,42 @@ export async function fetchWeatherData(city) {
     return null;
   }
 }
+
+export async function fetchHourlyWeather(city) {
+  const apiKey = "0b119156d44fd4ae748de6662549bb18";
+  const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+
+    const now = new Date();
+    const currentHour = now.toLocaleTimeString([], {
+      hour: "numeric",
+      hour12: true,
+    });
+
+    const hourlyForecast = data.list.slice(0, 5).map((hour) => ({
+      time: new Date(hour.dt * 1000).toLocaleTimeString([], {
+        hour: "numeric",
+        hour12: true,
+      }),
+      temperature: Math.round(hour.main.temp),
+      condition: hour.weather[0]?.description || "No description",
+    }));
+
+    hourlyForecast.unshift({
+      time: "Now",
+      temperature: Math.round(data.list[0].main.temp),
+      condition: data.list[0].weather[0]?.description || "No description",
+    });
+
+    return hourlyForecast;
+  } catch (error) {
+    console.error("Error fetching hourly weather data:", error);
+    return [];
+  }
+}
