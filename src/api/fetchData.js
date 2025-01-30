@@ -65,3 +65,60 @@ export async function fetchHourlyWeather(city) {
     return [];
   }
 }
+
+export async function fetchFiveDayForecast(city) {
+  const apiKey = "0b119156d44fd4ae748de6662549bb18";
+  const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=imperial&appid=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+
+    const dailyForecasts = {};
+    const today = new Date().toLocaleDateString("en-US", { weekday: "long" }); // "Monday"
+
+    data.list.forEach((forecast) => {
+      const date = new Date(forecast.dt * 1000);
+      const day = date.toLocaleDateString("en-US", { weekday: "long" });
+
+      if (!dailyForecasts[day]) {
+        dailyForecasts[day] = {
+          day,
+          maxTemperature: forecast.main.temp_max,
+          minTemperature: forecast.main.temp_min,
+        };
+      } else {
+        dailyForecasts[day].maxTemperature = Math.max(
+          dailyForecasts[day].maxTemperature,
+          forecast.main.temp_max
+        );
+        dailyForecasts[day].minTemperature = Math.min(
+          dailyForecasts[day].minTemperature,
+          forecast.main.temp_min
+        );
+      }
+    });
+
+    let fiveDayData = Object.values(dailyForecasts).slice(0, 5);
+
+    if (fiveDayData[0].day !== today) {
+      const currentWeather = await fetchWeatherData(city);
+      fiveDayData.unshift({
+        day: "Today",
+        maxTemperature: currentWeather.maxTemperature,
+        minTemperature: currentWeather.minTemperature,
+      });
+      fiveDayData = fiveDayData.slice(0, 5);
+    } else {
+      fiveDayData[0].day = "Today";
+    }
+
+    return fiveDayData;
+  } catch (error) {
+    console.error("Error fetching 5-day forecast:", error);
+    return [];
+  }
+}

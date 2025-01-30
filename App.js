@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
-import { fetchWeatherData, fetchHourlyWeather } from "./src/api/fetchData";
+import {
+  fetchWeatherData,
+  fetchHourlyWeather,
+  fetchFiveDayForecast,
+} from "./src/api/fetchData";
 import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const [weather, setWeather] = useState(null);
   const [hourlyForecast, setHourlyForecast] = useState([]);
+  const [fiveDayForecast, setFiveDayForecast] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const city = "Bear";
 
@@ -17,6 +22,9 @@ export default function App() {
 
         const hourlyData = await fetchHourlyWeather(city);
         setHourlyForecast(hourlyData);
+
+        const fiveDayData = await fetchFiveDayForecast(city);
+        setFiveDayForecast(fiveDayData);
       } catch (error) {
         console.error("Error fetching weather data:", error);
         setErrorMessage("Failed to fetch weather data.");
@@ -46,6 +54,7 @@ export default function App() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {/* Current Weather Forecast Container */}
       <View style={styles.currentWeatherContainer}>
         <Text style={styles.title}>My Location</Text>
         <Text style={styles.city}>{weather.location}</Text>
@@ -56,6 +65,7 @@ export default function App() {
           <Text style={styles.minMax}>L: {weather.minTemperature}°</Text>
         </View>
       </View>
+      {/* Hourly Forecast Container */}
       <View style={styles.hourlyForecastContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {hourlyForecast.map((hour, index) => (
@@ -72,6 +82,28 @@ export default function App() {
             </View>
           ))}
         </ScrollView>
+      </View>
+      {/* 5-Day Forecast Container */}
+      <View style={styles.fiveDayForecastContainer}>
+        <Text style={styles.fiveDayTitle}>5-Day Forecast</Text>
+
+        {fiveDayForecast.length === 0 && (
+          <Text style={{ color: "red" }}>No 5-day forecast data found</Text>
+        )}
+
+        {fiveDayForecast.map((day, index) => (
+          <View key={index} style={styles.fiveDayItem}>
+            <Text style={styles.dayText}>{day.day}</Text>
+            <View style={styles.tempRange}>
+              <Text style={styles.minMax}>
+                L: {Math.round(day.minTemperature)}°
+              </Text>
+              <Text style={styles.minMax}>
+                H: {Math.round(day.maxTemperature)}°
+              </Text>
+            </View>
+          </View>
+        ))}
       </View>
 
       <StatusBar style="auto" />
@@ -156,5 +188,34 @@ const styles = StyleSheet.create({
   hourlyCondition: {
     fontSize: 14,
     color: "lightgray",
+  },
+  fiveDayForecastContainer: {
+    width: "100%",
+    backgroundColor: "#002a4f",
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 20,
+  },
+  fiveDayTitle: {
+    fontSize: 20,
+    color: "white",
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  fiveDayItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255, 255, 255, 0.2)",
+  },
+  dayText: {
+    fontSize: 18,
+    color: "white",
+  },
+  fiveDayTemp: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "white",
   },
 });
