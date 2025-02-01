@@ -114,40 +114,39 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#000f2f",
+    backgroundColor: "#1E2A47",
     alignItems: "center",
     justifyContent: "flex-start",
     padding: 20,
-    paddingTop: 60,
+    paddingTop: 80,
   },
+
   currentWeatherContainer: {
     alignItems: "center",
-    width: "100%",
-    marginBottom: 30,
+    marginBottom: 20,
   },
   title: {
     fontSize: 28,
     color: "white",
   },
   city: {
-    fontSize: 24,
+    fontSize: 16,
     color: "white",
-    marginVertical: 8,
+    fontWeight: "600",
   },
   temperature: {
-    fontSize: 64,
+    fontSize: 80,
     color: "white",
-    marginVertical: 16,
+    fontWeight: "300",
   },
   tempRange: {
     flexDirection: "row",
     justifyContent: "space-between",
     width: "25%",
-    marginBottom: 16,
   },
   minMax: {
-    color: "#fff",
-    fontWeight: "600",
+    color: "white",
+    fontWeight: "500",
   },
   condition: {
     fontSize: 24,
@@ -158,9 +157,9 @@ const styles = StyleSheet.create({
     color: "red",
   },
   hourlyForecastContainer: {
-    width: "100%",
-    backgroundColor: "#002a4f",
-    padding: 15,
+    flexDirection: "row",
+    backgroundColor: "rgba(33, 68, 132, 0.38)",
+    padding: 10,
     borderRadius: 10,
     marginTop: 20,
   },
@@ -174,15 +173,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 10,
     borderRadius: 10,
-    marginRight: 10,
+    marginHorizontal: 10,
   },
   hourlyTime: {
-    fontSize: 16,
+    fontSize: 18,
     color: "white",
   },
   hourlyTemp: {
     fontSize: 18,
-    fontWeight: "bold",
     color: "white",
   },
   hourlyCondition: {
