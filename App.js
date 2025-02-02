@@ -46,7 +46,7 @@ export default function App() {
   if (!weather) {
     return (
       <View style={styles.container}>
-        <Text>Loading weather data...</Text>
+        <Text style={styles.loadingText}>Loading weather data...</Text>
         <StatusBar style="auto" />
       </View>
     );
@@ -85,7 +85,7 @@ export default function App() {
       </View>
       {/* 5-Day Forecast Container */}
       <View style={styles.fiveDayForecastContainer}>
-        <Text style={styles.fiveDayTitle}>5-Day Forecast</Text>
+        <Text style={styles.fiveDayTitle}>Daily Forecast</Text>
 
         {fiveDayForecast.length === 0 && (
           <Text style={{ color: "red" }}>No 5-day forecast data found</Text>
@@ -146,7 +146,8 @@ const styles = StyleSheet.create({
   },
   minMax: {
     color: "white",
-    fontWeight: "500",
+    fontSize: 18,
+    fontWeight: "600",
   },
   condition: {
     fontSize: 24,
@@ -177,10 +178,12 @@ const styles = StyleSheet.create({
   },
   hourlyTime: {
     fontSize: 18,
+    fontWeight: "600",
     color: "white",
   },
   hourlyTemp: {
     fontSize: 18,
+    fontWeight: "600",
     color: "white",
   },
   hourlyCondition: {
@@ -189,31 +192,38 @@ const styles = StyleSheet.create({
   },
   fiveDayForecastContainer: {
     width: "100%",
-    backgroundColor: "#002a4f",
+    backgroundColor: "rgba(33, 68, 132, 0.38)",
     padding: 15,
     borderRadius: 10,
     marginTop: 20,
   },
   fiveDayTitle: {
-    fontSize: 20,
+    fontSize: 15,
     color: "white",
-    fontWeight: "bold",
-    marginBottom: 10,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255, 255, 255, 0.2)",
   },
   fiveDayItem: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 10,
+    paddingRight: 25,
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255, 255, 255, 0.2)",
   },
   dayText: {
     fontSize: 18,
+    fontWeight: "600",
     color: "white",
   },
   fiveDayTemp: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "white",
+  },
+  loadingText: {
+    fontSize: 22,
     color: "white",
   },
 });
