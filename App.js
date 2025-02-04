@@ -58,7 +58,11 @@ export default function App() {
       <View style={styles.currentWeatherContainer}>
         <Text style={styles.title}>My Location</Text>
         <Text style={styles.city}>{weather.location}</Text>
-        <Text style={styles.temperature}>{weather.temperature}°</Text>
+        <View style={styles.temperatureContainer}>
+          <Text style={styles.temperature}>{weather.temperature}</Text>
+          <Text style={styles.degreeSymbol}>°</Text>
+        </View>
+
         <Text style={styles.condition}>{weather.weather}</Text>
         <View style={styles.tempRange}>
           <Text style={styles.minMax}>H: {weather.maxTemperature}°</Text>
@@ -134,11 +138,26 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "600",
   },
+  temperatureContainer: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    position: "relative",
+  },
   temperature: {
     fontSize: 80,
     color: "white",
     fontWeight: "300",
+    textAlign: "center",
   },
+  degreeSymbol: {
+    fontSize: 80,
+    color: "white",
+    fontWeight: "300",
+    position: "absolute",
+    right: -30,
+  },
+
   tempRange: {
     flexDirection: "row",
     justifyContent: "space-between",
