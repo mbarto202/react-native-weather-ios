@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Image } from "react-native";
 import {
   fetchWeatherData,
   fetchHourlyWeather,
@@ -82,11 +82,16 @@ export default function App() {
               >
                 {hour.time}
               </Text>
+
+              {/* ✅ Fix: Ensure the Image is properly wrapped */}
+              <Image source={{ uri: hour.icon }} style={styles.weatherIcon} />
+
               <Text style={styles.hourlyTemp}>{hour.temperature}°</Text>
             </View>
           ))}
         </ScrollView>
       </View>
+
       {/* 5-Day Forecast Container */}
       <View style={styles.fiveDayForecastContainer}>
         <Text style={styles.fiveDayTitle}>Daily Forecast</Text>
@@ -96,8 +101,19 @@ export default function App() {
         )}
 
         {fiveDayForecast.map((day, index) => (
-          <View key={index} style={styles.fiveDayItem}>
-            <Text style={styles.dayText}>{day.day}</Text>
+          <View
+            key={index}
+            style={[
+              styles.fiveDayItem,
+              index === fiveDayForecast.length - 1 ? styles.lastItem : {}, // ❌ Remove border from last item
+            ]}
+          >
+            <Text style={styles.dayText}>
+              {index === 0 ? "Today" : day.day}
+            </Text>
+
+            <Image source={{ uri: day.icon }} style={styles.weatherIcon} />
+
             <View style={styles.tempRange}>
               <Text style={styles.minMax}>
                 L: {Math.round(day.minTemperature)}°
@@ -161,7 +177,7 @@ const styles = StyleSheet.create({
   tempRange: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "25%",
+    width: "30%",
   },
   minMax: {
     color: "white",
@@ -214,11 +230,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(33, 68, 132, 0.38)",
     padding: 15,
     borderRadius: 10,
-    marginTop: 20,
+    marginTop: 10,
+    paddingTop: -10,
+    paddingBottom: -10,
   },
   fiveDayTitle: {
     fontSize: 15,
-    color: "white",
+    color: "rgba(255, 255, 255, 0.6)",
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255, 255, 255, 0.2)",
@@ -226,10 +244,12 @@ const styles = StyleSheet.create({
   fiveDayItem: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingRight: 25,
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255, 255, 255, 0.2)",
+  },
+  lastItem: {
+    borderBottomWidth: 0, // ❌ Remove border from the last item
   },
   dayText: {
     fontSize: 18,
@@ -244,5 +264,10 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 22,
     color: "white",
+  },
+  weatherIcon: {
+    width: 40,
+    height: 40,
+    marginVertical: 5,
   },
 });

@@ -50,13 +50,13 @@ export async function fetchHourlyWeather(city) {
         hour12: true,
       }),
       temperature: Math.round(hour.main.temp),
-      condition: hour.weather[0]?.description || "No description",
+      icon: `https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`,
     }));
 
     hourlyForecast.unshift({
       time: "Now",
       temperature: Math.round(data.list[0].main.temp),
-      condition: data.list[0].weather[0]?.description || "No description",
+      icon: `https://openweathermap.org/img/wn/${data.list[0].weather[0].icon}@2x.png`,
     });
 
     return hourlyForecast;
@@ -78,7 +78,6 @@ export async function fetchFiveDayForecast(city) {
     const data = await response.json();
 
     const dailyForecasts = {};
-    const today = new Date().toLocaleDateString("en-US", { weekday: "long" }); // "Monday"
 
     data.list.forEach((forecast) => {
       const date = new Date(forecast.dt * 1000);
@@ -89,6 +88,7 @@ export async function fetchFiveDayForecast(city) {
           day,
           maxTemperature: forecast.main.temp_max,
           minTemperature: forecast.main.temp_min,
+          icon: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`, // Weather icon URL
         };
       } else {
         dailyForecasts[day].maxTemperature = Math.max(
@@ -102,19 +102,7 @@ export async function fetchFiveDayForecast(city) {
       }
     });
 
-    let fiveDayData = Object.values(dailyForecasts).slice(0, 5);
-
-    if (fiveDayData[0].day !== today) {
-      const currentWeather = await fetchWeatherData(city);
-      fiveDayData.unshift({
-        day: "Today",
-        maxTemperature: currentWeather.maxTemperature,
-        minTemperature: currentWeather.minTemperature,
-      });
-      fiveDayData = fiveDayData.slice(0, 5);
-    } else {
-      fiveDayData[0].day = "Today";
-    }
+    const fiveDayData = Object.values(dailyForecasts).slice(0, 5);
 
     return fiveDayData;
   } catch (error) {
