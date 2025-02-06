@@ -83,7 +83,6 @@ export default function App() {
                 {hour.time}
               </Text>
 
-              {/* ✅ Fix: Ensure the Image is properly wrapped */}
               <Image source={{ uri: hour.icon }} style={styles.weatherIcon} />
 
               <Text style={styles.hourlyTemp}>{hour.temperature}°</Text>
@@ -94,25 +93,25 @@ export default function App() {
 
       {/* 5-Day Forecast Container */}
       <View style={styles.fiveDayForecastContainer}>
-        <Text style={styles.fiveDayTitle}>Daily Forecast</Text>
-
-        {fiveDayForecast.length === 0 && (
-          <Text style={{ color: "red" }}>No 5-day forecast data found</Text>
-        )}
+        <Text style={styles.fiveDayTitle}>5-DAY FORECAST</Text>
 
         {fiveDayForecast.map((day, index) => (
           <View
             key={index}
             style={[
               styles.fiveDayItem,
-              index === fiveDayForecast.length - 1 ? styles.lastItem : {}, // ❌ Remove border from last item
+              index === fiveDayForecast.length - 1 ? styles.lastItem : {},
             ]}
           >
-            <Text style={styles.dayText}>
-              {index === 0 ? "Today" : day.day}
-            </Text>
+            <View style={styles.dayContainer}>
+              <Text style={styles.dayText}>
+                {index === 0 ? "Today" : day.day}
+              </Text>
+            </View>
 
-            <Image source={{ uri: day.icon }} style={styles.weatherIcon} />
+            <View style={styles.iconWrapper}>
+              <Image source={{ uri: day.icon }} style={styles.weatherIcon} />
+            </View>
 
             <View style={styles.tempRange}>
               <Text style={styles.minMax}>
@@ -178,11 +177,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     width: "30%",
+    alignItems: "center",
   },
   minMax: {
-    color: "white",
     fontSize: 18,
     fontWeight: "600",
+    color: "white",
+    textAlign: "center",
   },
   condition: {
     fontSize: 24,
@@ -207,9 +208,17 @@ const styles = StyleSheet.create({
   },
   hourlyItem: {
     alignItems: "center",
+    justifyContent: "center",
     padding: 10,
     borderRadius: 10,
     marginHorizontal: 10,
+  },
+  iconWrapper: {
+    width: 50,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
   },
   hourlyTime: {
     fontSize: 18,
@@ -244,17 +253,22 @@ const styles = StyleSheet.create({
   fiveDayItem: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(255, 255, 255, 0.2)",
   },
   lastItem: {
-    borderBottomWidth: 0, // ❌ Remove border from the last item
+    borderBottomWidth: 0,
   },
   dayText: {
     fontSize: 18,
     fontWeight: "600",
     color: "white",
+  },
+  dayContainer: {
+    width: 80,
+    alignItems: "center",
   },
   fiveDayTemp: {
     fontSize: 18,
@@ -268,6 +282,6 @@ const styles = StyleSheet.create({
   weatherIcon: {
     width: 40,
     height: 40,
-    marginVertical: 5,
+    resizeMode: "contain",
   },
 });

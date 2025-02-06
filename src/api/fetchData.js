@@ -81,14 +81,14 @@ export async function fetchFiveDayForecast(city) {
 
     data.list.forEach((forecast) => {
       const date = new Date(forecast.dt * 1000);
-      const day = date.toLocaleDateString("en-US", { weekday: "long" });
+      const day = date.toLocaleDateString("en-US", { weekday: "short" });
 
       if (!dailyForecasts[day]) {
         dailyForecasts[day] = {
           day,
           maxTemperature: forecast.main.temp_max,
           minTemperature: forecast.main.temp_min,
-          icon: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`, // Weather icon URL
+          icon: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`,
         };
       } else {
         dailyForecasts[day].maxTemperature = Math.max(
