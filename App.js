@@ -6,6 +6,7 @@ import {
   fetchFiveDayForecast,
 } from "./src/api/fetchData";
 import { StatusBar } from "expo-status-bar";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function App() {
   const [weather, setWeather] = useState(null);
@@ -52,88 +53,110 @@ export default function App() {
     );
   }
 
+  const getGradientColors = (weather) => {
+    switch (weather) {
+      case "Clear":
+        return ["#4A90E2", "#145DA0"]; // Sunny gradient
+      case "Clouds":
+        return ["#757F9A", "#D7DDE8"]; // Cloudy gradient
+      case "Rain":
+        return ["#5C258D", "#4389A2"]; // Rainy gradient
+      case "Snow":
+        return ["#E6DADA", "#274046"]; // Snowy gradient
+      default:
+        return ["#4A90E2", "#145DA0"];
+    }
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Current Weather Forecast Container */}
-      <View style={styles.currentWeatherContainer}>
-        <Text style={styles.title}>My Location</Text>
-        <Text style={styles.city}>{weather.location}</Text>
-        <View style={styles.temperatureContainer}>
-          <Text style={styles.temperature}>{weather.temperature}</Text>
-          <Text style={styles.degreeSymbol}>°</Text>
+    <LinearGradient
+      colors={getGradientColors(weather.weather)}
+      style={styles.gradientBackground}
+    >
+      <ScrollView contentContainerStyle={styles.container}>
+        {/* Current Weather Forecast Container */}
+        <View style={styles.currentWeatherContainer}>
+          <Text style={styles.title}>My Location</Text>
+          <Text style={styles.city}>{weather.location}</Text>
+          <View style={styles.temperatureContainer}>
+            <Text style={styles.temperature}>{weather.temperature}</Text>
+            <Text style={styles.degreeSymbol}>°</Text>
+          </View>
+
+          <Text style={styles.condition}>{weather.weather}</Text>
+          <View style={styles.tempRange}>
+            <Text style={styles.minMax}>H: {weather.maxTemperature}°</Text>
+            <Text style={styles.minMax}>L: {weather.minTemperature}°</Text>
+          </View>
+        </View>
+        {/* Hourly Forecast Container */}
+        <View style={styles.hourlyForecastContainer}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {hourlyForecast.map((hour, index) => (
+              <View key={index} style={styles.hourlyItem}>
+                <Text
+                  style={[
+                    styles.hourlyTime,
+                    hour.time === "Now" && styles.nowText,
+                  ]}
+                >
+                  {hour.time}
+                </Text>
+
+                <Image source={{ uri: hour.icon }} style={styles.weatherIcon} />
+
+                <Text style={styles.hourlyTemp}>{hour.temperature}°</Text>
+              </View>
+            ))}
+          </ScrollView>
         </View>
 
-        <Text style={styles.condition}>{weather.weather}</Text>
-        <View style={styles.tempRange}>
-          <Text style={styles.minMax}>H: {weather.maxTemperature}°</Text>
-          <Text style={styles.minMax}>L: {weather.minTemperature}°</Text>
-        </View>
-      </View>
-      {/* Hourly Forecast Container */}
-      <View style={styles.hourlyForecastContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {hourlyForecast.map((hour, index) => (
-            <View key={index} style={styles.hourlyItem}>
-              <Text
-                style={[
-                  styles.hourlyTime,
-                  hour.time === "Now" && styles.nowText,
-                ]}
-              >
-                {hour.time}
-              </Text>
+        {/* 5-Day Forecast Container */}
+        <View style={styles.fiveDayForecastContainer}>
+          <Text style={styles.fiveDayTitle}>5-DAY FORECAST</Text>
 
-              <Image source={{ uri: hour.icon }} style={styles.weatherIcon} />
+          {fiveDayForecast.map((day, index) => (
+            <View
+              key={index}
+              style={[
+                styles.fiveDayItem,
+                index === fiveDayForecast.length - 1 ? styles.lastItem : {},
+              ]}
+            >
+              <View style={styles.dayContainer}>
+                <Text style={styles.dayText}>
+                  {index === 0 ? "Today" : day.day}
+                </Text>
+              </View>
 
-              <Text style={styles.hourlyTemp}>{hour.temperature}°</Text>
+              <View style={styles.iconWrapper}>
+                <Image source={{ uri: day.icon }} style={styles.weatherIcon} />
+              </View>
+
+              <View style={styles.tempRange}>
+                <Text style={styles.minMax}>
+                  L: {Math.round(day.minTemperature)}°
+                </Text>
+                <Text style={styles.minMax}>
+                  H: {Math.round(day.maxTemperature)}°
+                </Text>
+              </View>
             </View>
           ))}
-        </ScrollView>
-      </View>
+        </View>
 
-      {/* 5-Day Forecast Container */}
-      <View style={styles.fiveDayForecastContainer}>
-        <Text style={styles.fiveDayTitle}>5-DAY FORECAST</Text>
-
-        {fiveDayForecast.map((day, index) => (
-          <View
-            key={index}
-            style={[
-              styles.fiveDayItem,
-              index === fiveDayForecast.length - 1 ? styles.lastItem : {},
-            ]}
-          >
-            <View style={styles.dayContainer}>
-              <Text style={styles.dayText}>
-                {index === 0 ? "Today" : day.day}
-              </Text>
-            </View>
-
-            <View style={styles.iconWrapper}>
-              <Image source={{ uri: day.icon }} style={styles.weatherIcon} />
-            </View>
-
-            <View style={styles.tempRange}>
-              <Text style={styles.minMax}>
-                L: {Math.round(day.minTemperature)}°
-              </Text>
-              <Text style={styles.minMax}>
-                H: {Math.round(day.maxTemperature)}°
-              </Text>
-            </View>
-          </View>
-        ))}
-      </View>
-
-      <StatusBar style="auto" />
-    </ScrollView>
+        <StatusBar style="auto" />
+      </ScrollView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
+  gradientBackground: {
+    flex: 1,
+  },
   container: {
     flexGrow: 1,
-    backgroundColor: "#1E2A47",
     alignItems: "center",
     justifyContent: "flex-start",
     padding: 20,
