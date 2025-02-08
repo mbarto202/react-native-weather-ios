@@ -56,13 +56,13 @@ export default function App() {
   const getGradientColors = (weather) => {
     switch (weather) {
       case "Clear":
-        return ["#4A90E2", "#145DA0"]; // Sunny gradient
+        return ["#4A90E2", "#145DA0"];
       case "Clouds":
-        return ["#757F9A", "#D7DDE8"]; // Cloudy gradient
+        return ["#757F9A", "#D7DDE8"];
       case "Rain":
-        return ["#5C258D", "#4389A2"]; // Rainy gradient
+        return ["#5C258D", "#4389A2"];
       case "Snow":
-        return ["#E6DADA", "#274046"]; // Snowy gradient
+        return ["#E6DADA", "#274046"];
       default:
         return ["#4A90E2", "#145DA0"];
     }
@@ -170,6 +170,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     color: "white",
+    letterSpacing: 1.2,
   },
   city: {
     fontSize: 16,
@@ -180,20 +181,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "center",
-    position: "relative",
   },
   temperature: {
-    fontSize: 80,
+    fontSize: 100,
     color: "white",
-    fontWeight: "300",
+    fontWeight: "200",
     textAlign: "center",
   },
   degreeSymbol: {
     fontSize: 80,
     color: "white",
-    fontWeight: "300",
+    fontWeight: "200",
     position: "absolute",
-    right: -30,
+    right: -25,
+    marginTop: 5,
   },
 
   tempRange: {
@@ -204,13 +205,14 @@ const styles = StyleSheet.create({
   },
   minMax: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: "500",
     color: "white",
     textAlign: "center",
   },
   condition: {
-    fontSize: 24,
+    fontSize: 22,
     color: "white",
+    marginTop: -10,
   },
   error: {
     fontSize: 18,
@@ -218,9 +220,9 @@ const styles = StyleSheet.create({
   },
   hourlyForecastContainer: {
     flexDirection: "row",
-    backgroundColor: "rgba(33, 68, 132, 0.38)",
-    padding: 10,
-    borderRadius: 10,
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
+    padding: 15,
+    borderRadius: 20,
     marginTop: 20,
   },
   hourlyTitle: {
@@ -232,7 +234,7 @@ const styles = StyleSheet.create({
   hourlyItem: {
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
+    padding: 5,
     borderRadius: 10,
     marginHorizontal: 10,
   },
@@ -259,9 +261,9 @@ const styles = StyleSheet.create({
   },
   fiveDayForecastContainer: {
     width: "100%",
-    backgroundColor: "rgba(33, 68, 132, 0.38)",
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 20,
     marginTop: 10,
     paddingTop: -10,
     paddingBottom: -10,
@@ -303,8 +305,9 @@ const styles = StyleSheet.create({
     color: "white",
   },
   weatherIcon: {
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
     resizeMode: "contain",
+    marginVertical: -5,
   },
 });
